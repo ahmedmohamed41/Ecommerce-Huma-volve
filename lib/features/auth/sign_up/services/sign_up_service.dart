@@ -1,7 +1,7 @@
 import 'package:ecommerce_app_huma_volve/core/constant/api_endpoint.dart';
 import 'package:ecommerce_app_huma_volve/core/network/api_client.dart';
-import 'package:ecommerce_app_huma_volve/features/auth/sign_up/models/signup_model.dart';
-import 'package:ecommerce_app_huma_volve/features/auth/sign_up/models/signup_re_model.dart';
+import 'package:ecommerce_app_huma_volve/features/auth/sign_up/services/models/signup_model.dart';
+import 'package:ecommerce_app_huma_volve/features/auth/sign_up/services/models/signup_re_model.dart';
 
 class SignUpService {
   ApiClient apiClient;
