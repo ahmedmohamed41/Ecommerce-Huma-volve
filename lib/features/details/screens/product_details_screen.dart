@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_huma_volve/features/home/services/models/product_model.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/entites/home_product_entity.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme.dart';
@@ -7,7 +7,7 @@ import '../widgets/size_selector.dart';
 import '../../../core/widgets/primary_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final ProductModel productModel;
+  final HomeProductEntity productModel;
 
   const ProductDetailsScreen({super.key, required this.productModel});
 

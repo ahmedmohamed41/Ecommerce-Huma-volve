@@ -1,0 +1,12 @@
+import 'package:ecommerce_app_huma_volve/features/auth/login/domain/entites/login_entity.dart';
+
+class LoginModel extends LoginEntity {
+  LoginModel({super.accessToken, super.refreshToken});
+
+  factory LoginModel.fromJson(Map<String, dynamic> json) {
+    return LoginModel(
+      accessToken: json['access_token'],
+      refreshToken: json['refresh_token'],
+    );
+  }
+}

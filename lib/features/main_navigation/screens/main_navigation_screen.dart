@@ -1,11 +1,14 @@
 import 'package:ecommerce_app_huma_volve/core/network/api_client.dart';
-import 'package:ecommerce_app_huma_volve/features/home/cubit/home_cubit.dart';
-import 'package:ecommerce_app_huma_volve/features/home/services/home_service.dart';
+import 'package:ecommerce_app_huma_volve/features/home/data/data_source/home_remote_data_source_impl.dart';
+import 'package:ecommerce_app_huma_volve/features/home/data/repository/home_repository_impl.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/use_cases/home_category_use_case.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/use_cases/home_product_use_case.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/view_model/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme.dart';
-import '../../home/screens/home_screen.dart';
+import '../../home/presentation/view/screens/home_screen.dart';
 import '../../cart/screens/cart_screen.dart';
 import '../../profile/screens/profile_screen.dart';
 
@@ -19,14 +22,20 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
   late final HomeCubit homeCubit;
-  late final HomeService homeService;
-  late final ApiClient apiClient;
+  late final ApiClient _apiClient;
+  late final HomeRepositoryImpl _homeRepositoryImpl;
+  late final HomeRemoteDataSourceImpl _homeRemoteDataSourceImpl;
+  late final GetCategoryUseCase _getCategoryUseCase;
+  late final GetProductUseCase _getProductUseCase;
   @override
   void initState() {
     // TODO: implement initState
-    apiClient = ApiClient();
-    homeService = HomeService(apiClient);
-    homeCubit = HomeCubit(homeService);
+    _apiClient = ApiClient();
+    _homeRemoteDataSourceImpl = HomeRemoteDataSourceImpl(_apiClient);
+    _homeRepositoryImpl = HomeRepositoryImpl(_homeRemoteDataSourceImpl);
+    _getCategoryUseCase = GetCategoryUseCase(_homeRepositoryImpl);
+    _getProductUseCase = GetProductUseCase(_homeRepositoryImpl);
+    homeCubit = HomeCubit(_getCategoryUseCase, _getProductUseCase);
     super.initState();
   }
 
