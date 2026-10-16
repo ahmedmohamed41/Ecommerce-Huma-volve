@@ -17,10 +17,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedCategoryIndex = 0;
+  late ScrollController scrollController;
   @override
   void initState() {
-    context.read<HomeCubit>().loadHomeData();
     super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(_onListen);
+
+    context.read<HomeCubit>().loadHomeData();
+  }
+
+  void _onListen() {
+    final pixels = scrollController.position.pixels;
+    final max = scrollController.position.maxScrollExtent;
+    final int triggerDistance = 200;
+
+    if (pixels >= max - triggerDistance) {
+      context.read<HomeCubit>().loadMoreProducts();
+    }
   }
 
   @override
@@ -120,7 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       buildWhen: (previous, current) {
                         if (current is ProductsError ||
                             current is ProductsLoading ||
-                            current is ProductsSuccess) {
+                            current is ProductsSuccess ||
+                            current is ProductsLoadingError ||
+                            current is ProductsLoadingMore) {
                           return false;
                         } else {
                           return true;
@@ -170,10 +186,14 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               sliver: BlocBuilder<HomeCubit, HomeState>(
-                buildWhen: (previous, current) =>
-                    current is ProductsSuccess ||
-                    current is ProductsLoading ||
-                    current is ProductsError,
+                buildWhen: (previous, current) {
+                  if (current is ProductsLoadingError ||
+                      current is ProductsLoadingError) {
+                    return false;
+                  }
+                  return true;
+                },
+
                 builder: (context, state) {
                   if (state is ProductsLoading) {
                     return const SliverFillRemaining(
